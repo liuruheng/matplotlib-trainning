@@ -9,7 +9,14 @@ import datetime
 
 #XAG
 FUTURE_URL = 'http://www.fx678.com/'
+#汇通网报价
+FX678_XAG_URL = 'http://api.q.fx678.com/quotes.php?exchName=WGJS&symbol=XAG'
+FX678_XAU_URL = 'http://api.q.fx678.com/quotes.php?exchName=WGJS&symbol=XAU'
 
+#金十报价墙
+JIN10_PRICE_WALL = 'https://www.jin10.com/price_wall/index.html'
+#安全socket连接中包含报价信息
+#https://ssgfcfkdll.jin10.com:9081/socket.io/?EIO=3&transport=polling&t=LxSsrnb&sid=CI8hf7hc-WLfuazjABqN
 # 获取当前时间
 d1 = datetime.datetime.now()
 print d1

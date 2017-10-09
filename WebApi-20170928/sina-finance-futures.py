@@ -10,10 +10,11 @@ import re
 XAU_URL='http://finance.sina.com.cn/futures/quotes/XAU.shtml'
 #伦敦银
 XAG_URL='http://finance.sina.com.cn/futures/quotes/XAG.shtml'
-#XAU-JS
-XAG_JS_URL = 'http://hq.sinajs.cn/?_=1506753075305/&list=hf_XAU'
+#新浪报价
+# XAU-JS
+SINA_XAG_JS_URL = 'http://hq.sinajs.cn/&list=hf_XAU'
 #XAG-JS
-XAG_JS_URL = 'http://hq.sinajs.cn/?_=1506752449226/&list=hf_XAG'
+SINA_XAG_JS_URL = 'http://hq.sinajs.cn/&list=hf_XAG'
 #JS_Dict
 JS_DICT = ['real-price','wave-rate','buy','sell','max-price','min-price',
            'trade-end-time','yestoday-price','close-price',

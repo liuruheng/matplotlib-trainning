@@ -1,7 +1,7 @@
 #coding=utf-8
 
 import requests
-from time import ctime
+import time
 from urllib2 import urlopen
 from bs4 import BeautifulSoup
 import re
@@ -12,6 +12,13 @@ FUTURE_URL = 'http://www.fx678.com/'
 #汇通网报价
 FX678_XAG_URL = 'http://api.q.fx678.com/quotes.php?exchName=WGJS&symbol=XAG'
 FX678_XAU_URL = 'http://api.q.fx678.com/quotes.php?exchName=WGJS&symbol=XAU'
+# 开盘价 --- p
+# 最新价 --- b
+# 最高价 --- h
+# 最低价 --- l
+# 时间戳 --- t
+# 买入价 --- b
+# 卖出价 --- se
 
 #金十报价墙
 JIN10_PRICE_WALL = 'https://www.jin10.com/price_wall/index.html'
@@ -54,6 +61,7 @@ def queryInfo(url):
 
         infoDict = dict(zip(tag,value))
         print infoDict
+        print time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(float(infoDict[u'"t"'])))
     except (Exception),e:
         print "Exception: "+e.message
         return ""

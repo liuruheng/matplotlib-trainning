@@ -43,7 +43,9 @@ def queryInfo(url):
 
         for item in content:
             tag.append(item.split(':')[0])
-            value.append(re.sub('\"]', '', re.sub('\["', '', item.split(':')[1])))
+            #以下两种写法效果相同
+            value.append(item.split(':')[1].strip('[""]'))
+            #value.append(re.sub('\"]', '', re.sub('\["', '', item.split(':')[1])))
 
         #for i in range(len(content)):
             #print "%s  %s" % (content[i].split(':')[0], content[i].split(':')[1])

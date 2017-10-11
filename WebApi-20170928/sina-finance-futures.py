@@ -12,12 +12,12 @@ XAU_URL='http://finance.sina.com.cn/futures/quotes/XAU.shtml'
 XAG_URL='http://finance.sina.com.cn/futures/quotes/XAG.shtml'
 #新浪报价
 # XAU-JS
-SINA_XAG_JS_URL = 'http://hq.sinajs.cn/&list=hf_XAU'
+SINA_XAU_JS_URL = 'http://hq.sinajs.cn/&list=hf_XAU'
 #XAG-JS
 SINA_XAG_JS_URL = 'http://hq.sinajs.cn/&list=hf_XAG'
 #JS_Dict
-JS_DICT = ['real-price','wave-rate','buy','sell','max-price','min-price',
-           'trade-end-time','yestoday-price','close-price',
+JS_DICT = ['real-price','wave-rate','buy','sell','max-price','min-price',\
+           'trade-end-time','yestoday-price','close-price',\
            'amount','volume','buy-amount','sell-amount']
 #JS_DICT = ['最新价','涨跌率','买价','卖价','最高价','最低价',
 #           '收盘时间','昨结算','收盘价','持仓量','成交量','买入量','卖出量']
@@ -58,10 +58,10 @@ def getXAGInfo(url):
 
 def getXAGJS():
     '''从JS中获取现货白银报价等相关信息'''
-    r = requests.get(XAG_JS_URL)
+    r = requests.get(SINA_XAG_JS_URL)
     print("Status code:", r.status_code)
 
-    u = urlopen(XAG_JS_URL)
+    u = urlopen(SINA_XAG_JS_URL)
 
     js_content = (u.read().split('='))[1].split(',')
     js_dict = dict(zip(JS_DICT,js_content))

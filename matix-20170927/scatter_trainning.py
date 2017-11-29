@@ -4,7 +4,9 @@ from pandas import Series,DataFrame
 import matplotlib.pyplot as plt
 import matplotlib.finance as mpf
 from matplotlib.dates import MinuteLocator,HourLocator,DateLocator,DateFormatter
-
+from matplotlib.dates import datestr2num,strpdate2num,date2num
+import numpy as np
+import datetime
 
 def translate_db_to_df(dbFile, lineCnt):
     """ 外部接口API: 将db文件中的条目转换成dateframe格式
@@ -27,11 +29,18 @@ def translate_db_to_df(dbFile, lineCnt):
         dbCursor.close()
         db.close()
         if ret == None: return None
-
+    listwithoutid = []
+    for itemline in ret:
+        clearline = []
+        clearline.extend(itemline[1:])
+        listwithoutid.append(clearline)
+    #print ret
+    #print listwithoutid
     # 抬头信息
-    title = ['id'] + map(lambda x:x , ('open','high','low','close','time'))
+    title = map(lambda x:x , ('time','open','high','low','close'))
 
-    dataframe = DataFrame(ret,columns=title)
+    dataframe = DataFrame(listwithoutid,columns=title)
+    #dataframe = DataFrame(ret)
     return dataframe
 
 def drawing_figure():
@@ -65,15 +74,27 @@ def drawing_candlestick():
     stock_array = translate_db_to_df('D:\\misc\\future\\2017-48\\15min.db',20)
     quotes = stock_array.ix[:,[5,1,2,3,4]]
     print type(quotes)
-    #mpf.candlestick_ohlc(ax,stock_array)
+    mpf.candlestick_ohlc(ax,stock_array,colorup='red',colordown='green',width=0.4)
 
 def sample_candlestick():
     # 设置历史数据区间
     date1 = (2014, 12, 1) # 起始日期，格式：(年，月，日)元组
     date2 = (2016, 12, 1)  # 结束日期，格式：(年，月，日)元组
-    # 从雅虎财经中获取股票代码601558的历史行情
-    quotes = mpf.quotes_historical_yahoo_ohlc('601558.ss', date1, date2)
 
+    # 从雅虎财经中获取股票代码601558的历史行情
+    #quotes = mpf.quotes_historical_yahoo_ohlc('601558.ss', date1, date2)
+    stock_array = np.array(translate_db_to_df('D:\\misc\\future\\2017-48\\5min.db',-1))
+    quotes = stock_array
+    #quotes = np.array(stock_array.reset_index()[['time','open','high','low','close']])
+    #quotes[:,0] = strpdate2num(quotes[:,0])
+    #print type(quotes)
+    for q in quotes:
+        q[0] = datetime.datetime.strptime(q[0],"%Y-%m-%d %H:%M:%S")
+        q[0] = date2num(q[0])
+        t, open, high, low,close = q[:5]
+        print t, open, high, low,close,type(t)
+    #print type(datetime.datetime.now())
+    #print date2num(datetime.datetime.now())
     # 创建一个子图
     fig, ax = plt.subplots(facecolor=(0.5, 0.5, 0.5))
     fig.subplots_adjust(bottom=0.2)
@@ -81,13 +102,13 @@ def sample_candlestick():
     ax.xaxis_date()
     # X轴刻度文字倾斜45度
     plt.xticks(rotation=45)
-    plt.title("股票代码：601558两年K线图")
-    plt.xlabel("时间")
-    plt.ylabel("股价（元）")
+    #plt.title("股票代码：601558两年K线图")
+    #plt.xlabel("时间")
+    #plt.ylabel("股价（元）")
     mpf.candlestick_ohlc(ax,quotes,width=1.2,colorup='r',colordown='green')
     plt.grid(True)
 
 if __name__ == '__main__':
     #drawing_figure()
-    drawing_candlestick()
-    #sample_candlestick()
+    #drawing_candlestick()
+    sample_candlestick()

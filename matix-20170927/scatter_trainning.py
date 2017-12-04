@@ -9,7 +9,7 @@ import numpy as np
 import datetime
 import inspect
 from matplotlib.finance import quotes_historical_yahoo_ohlc, candlestick_ohlc
-import matplotlib
+import matplotlib.ticker as ticker
 
 def translate_db_to_df(dbFile, lineCnt):
     """ 外部接口API: 将db文件中的条目转换成dateframe格式
@@ -149,11 +149,11 @@ def sample_show():
     dayFormatter = DateFormatter('%d')      # e.g., 12
     quotes = []
     #quotes = quotes_historical_yahoo_ohlc('INTC', date1, date2)
-    print matplotlib.dates.date2num(datetime.datetime(2004, 02, 9))
+    print matplotlib.dates.date2num(datetime.datetime(2004, 02, 9, 11, 02, 35))
 
-    day = datetime.datetime.strptime('2014-09-09', "%Y-%m-%d")
-    print day.strftime('%d')
-    kk = int(day.strftime('%d'))
+    #day = datetime.datetime.strptime('2014-09-09', "%Y-%m-%d")
+    #print day.strftime('%d')
+    #kk = int(day.strftime('%d'))
     quotes = [(731613.0, 21, 21.9, 21.41, 21.49), \
     (731614.0, 21.58059381723535, 22.282458652866239, 21.495518496815286, 22.261189999999999, 62375400.0),\
     (731615.0, 21.970149977014657, 22.005642238507662, 21.302881405729515, 21.309979999999999, 79361900.0),\
@@ -204,13 +204,13 @@ def sample_show():
     (731679.0, 19.932852477425921, 19.97544333268921, 19.308176898819003, 19.428853, 71791400.0),\
     (731683.0, 19.663107655511631, 19.712797107608694, 19.329473001086956, 19.592120999999999, 51016700.0)]
     #quotes = [(matplotlib.dates.date2num(datetime.datetime(2004, 02, 03)),32,43,23,33),(matplotlib.dates.date2num(datetime.datetime(2004, 02, 04)),32,43,23,36),(matplotlib.dates.date2num(datetime.datetime(2004, 02, 07)),52,45,23,33) ,(matplotlib.dates.date2num(datetime.datetime(2004, 02, 8)),52,45,23,33) ]
-    quotes.append((matplotlib.dates.date2num(datetime.datetime(2004, 2, 3)),32,43,23,33))
-    quotes.append((matplotlib.dates.date2num(datetime.datetime(2004, 2, 04)),42,65,33,43))
-    quotes.append((matplotlib.dates.date2num(datetime.datetime(2004, 2, 5)),33.0,63,23,53))
-    quotes.append((matplotlib.dates.date2num(datetime.datetime(2004, 2, 6)),34.34,43.343,23.34,33.34))
-    quotes.append((matplotlib.dates.date2num(datetime.datetime(2004, 2, kk)),32.34,43.34,23.3,33.3))
+    #quotes.append((matplotlib.dates.date2num(datetime.datetime(2004, 2, 3)),32,43,23,33))
+    #quotes.append((matplotlib.dates.date2num(datetime.datetime(2004, 2, 04)),42,65,33,43))
+    #quotes.append((matplotlib.dates.date2num(datetime.datetime(2004, 2, 5)),33.0,63,23,53))
+    #quotes.append((matplotlib.dates.date2num(datetime.datetime(2004, 2, 6)),34.34,43.343,23.34,33.34))
+    #quotes.append((matplotlib.dates.date2num(datetime.datetime(2004, 2, kk)),32.34,43.34,23.3,33.3))
 
-    print quotes
+    #print quotes
     if len(quotes) == 0:
         raise SystemExit
 
@@ -224,8 +224,43 @@ def sample_show():
     #plot_day_summary(ax, quotes, ticksize=3)
     candlestick_ohlc(ax, quotes, width=0.6)
     ax.grid(True)
-    ax.xaxis_date()
-    ax.autoscale_view()
+    #ax.xaxis_date()
+    #ax.autoscale_view()
+    plt.setp(plt.gca().get_xticklabels(), rotation=45, horizontalalignment='right')
+
+    plt.show()
+
+def six_hour_format_func(x,pos):
+    return pos
+
+def hour_trainning_show():
+    quotes = [(731613.0, 21, 21.9, 21.41, 21.49), \
+    (731613.1, 21.58059381723535, 22.282458652866239, 21.495518496815286, 22.261189999999999, 62375400.0),\
+    (731613.2, 21.970149977014657, 22.005642238507662, 21.302881405729515, 21.309979999999999, 79361900.0),\
+    (731613.3, 19.932852625168263, 19.968344886507502, 19.506936970784327, 19.606318000000002, 72680200.0),\
+    (731613.4, 19.932852477425921, 19.97544333268921, 19.308176898819003, 19.428853, 71791400.0),\
+    (731613.5, 19.663107655511631, 19.712797107608694, 19.329473001086956, 19.592120999999999, 51016700.0)]
+
+    mondays = WeekdayLocator(MONDAY)        # major ticks on the mondays
+    alldays = DayLocator()              # minor ticks on the days
+    weekFormatter = DateFormatter('%b %d')  # e.g., Jan 12
+    dayFormatter = DateFormatter('%H')      # e.g., 12
+
+    hourloc = HourLocator(interval=1)
+    minloc = MinuteLocator(interval=30)
+
+    fig, ax = plt.subplots(figsize=(8,5))
+    fig.subplots_adjust(bottom=0.2)
+    #ax.xaxis.set_major_locator(mondays)
+    #ax.xaxis.set_minor_locator(alldays)
+    #ax.xaxis.set_major_formatter(weekFormatter)
+    #ax.xaxis.set_minor_formatter(dayFormatter)
+    ax.xaxis.set_major_locator(minloc)
+    ax.xaxis.set_major_formatter(DateFormatter('%M'))
+
+    #plot_day_summary(ax, quotes, ticksize=3)
+    candlestick_ohlc(ax, quotes,width=0.01)
+    ax.grid(True)
     plt.setp(plt.gca().get_xticklabels(), rotation=45, horizontalalignment='right')
 
     plt.show()
@@ -235,4 +270,5 @@ if __name__ == '__main__':
     #drawing_candlestick()
     #sample_candlestick()
     #test_pyplot()
-    sample_show()
+    #sample_show()
+    hour_trainning_show()
